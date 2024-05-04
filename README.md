@@ -65,4 +65,20 @@ The covariance function, $K: \mathcal{X}\times\mathcal{X} → \mathbb{R}$, defin
 The GP is then defined as $$p(f) = GP(f; \mu, K)$$
 
 Using the defined mean and covariance functions, we can compute any finite-dimensional marginal distribution. For example, let $\boldsymbol{x} ⊂ \mathcal{X}$ be finite and $\boldsymbol{\phi} = f(\boldsymbol{x})$ be the respective function values. Using a GP, $\boldsymbol{\phi}$ is a multivaraite normal with the following parameters $$p(\boldsymbol{\phi} \text{ } | \text{ } \boldsymbol{x}) = \mathcal{N}(\boldsymbol{\phi}; \boldsymbol{\mu}, \Sigma)$$ where $$\boldsymbol{\mu} = \mathbb{E}[\boldsymbol{\phi} \text{ } | \text{ } \boldsymbol{x}] = \mu(x)$$ and $$\Sigma = cov[\boldsymbol{\phi} \text{ } | \text{ } \boldsymbol{x}] = K(\boldsymbol{x}, \boldsymbol{x})$$
+
+# Example
+
+Now let's illustrate an example to put all the information above to good use. 
+
+Let's consider a function $f: \mathcal{X} → \mathbb{R}$ where $\mathcal{X} = [0, 30]$. Let the mean function be identically zero, $\mu = 0$ and let the covariance function be the squared exponential, $K(x, x') = exp(-\frac{1}{2}|x - x'|^2)$. 
+
+Note that $K(x, x) = exp(-\frac{1}{2}|x - x|^2) = exp(0) = 1$, so the squared exponential measures correlation and has the following interpretation: function values that are close to eachother are highly correlated and function values that are far way are independent. Below is a graph of the squared exponential to illustrate that larger distances between points will result in a smaller squared exponential. 
+
+<img src="https://drive.google.com/uc?export=view&id=1Mw3dV3LmwFqITBcHWLYgDwtKP8T7XP-m" alt="Square Exponential" width="300"/>
+
+To generate the GPs, we simulate vectors from a joint multivariate normal distribution with mean $\mu = 0$ and a positive semidefinite covariance $\Sigma = K(\boldsymbol{x}, \boldsymbol{x})$. In other words, we draw vectors from $\mathcal{N}(\boldsymbol{\phi}; \boldsymbol{\mu}, \Sigma)$. Shown in the plot below, I simulate vectors $\boldsymbol{\phi_i} \in \mathbb{R}^n$ for $i = 1, 2, 3$ and $ n = 200$. Each $\boldsymbol{\phi_i}$ represents a GP or prior process. The shaded grey region represents a $95\%$ confidence interval. In this example, since the marginal distributions for any single function value is a univariate standard normal, the CI is $\mu \pm 1.96$.  
+
+<img src="https://drive.google.com/uc?export=view&id=1KzhWOzDXc2pLMNwNfTLQaETLFP189xuQ" alt="Square Exponential" width="1000"/>
+
+We have generated a prior process! We have one step out of the way! Now we move onto constructing a likelihood function from observing data
    
