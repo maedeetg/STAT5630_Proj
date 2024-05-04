@@ -48,5 +48,21 @@ Now, let's extend this to inference of the **entire** objective function, $\bold
 
   * Extending the posterior on $\boldsymbol{\phi}$ to all of $f$, we get $$p(f\text{ }|\text{ }\mathcal{D}) = ∫ p(f \text{ } | \text{ } \boldsymbol{x}, \boldsymbol{\phi})p(\boldsymbol{\phi} \text{ } | \text{ } \mathcal{D}) d\boldsymbol{\phi}$$
 
+# Gaussian Process: How to Build a Useful Prior Distribution
 
+A Gaussian process (GP) is a mathematical framework used to model a collection of random variables representing functions, where any finite subset of these variables follows a multivariate normal distribution. In simpler terms, a GP is a way to represent a distribution over functions. Instead of modeling functions directly, GPs model the distribution of functions themselves.
+
+Again, let's consider an objective function $f: \mathcal{X} → \mathbb{R}$ such that $\mathcal{X}$ is an infinite domain. We will consider the collection of random variables, where each random variable represents a function value for every point in the domain. 
+
+Dealing a infinite collection of RVs can be daunting and using the infinite collection of RVs to create a useful distribution is infeasible. However, we can address the issue by condensing the problem to a finite set of function values due to the Kolmogorov extension theorem, a theorem justifying constructing a stochastic process from a finite collection of RVs. In the context of GPs, these finite collections of RVs each are multivariate normal distributions.  
+
+A GP is specified by its mean function and a positive semidefinite covariance function. 
+
+The mean function, $\mu: \mathcal{X} → \mathbb{R}$, calculates $\mu(x) = \mathbb{E}[\phi \text{ } | \text{ } x]$, the expected value of $\phi = f(x)$ at any point $x$. 
+
+The covariance function, $K: \mathcal{X}\times\mathcal{X} → \mathbb{R}$, defines the structure of deviations from the mean, $\mu$, while capturing properties of the function's behavior. Define a new objective value $\phi' = f(x')$, we can define the covariance function as $K(x, x') = cov[\phi, \phi' \text{ } | \text{ } x, x']$ or $K(x, x') = \mathbb{E}[(\phi - \mu(x))(\phi' - \mu(x'))]$. 
+
+The GP is then defined as $$p(f) = GP(f; \mu, K)$$
+
+Using the defined mean and covariance functions, we can compute any finite-dimensional marginal distribution. For example, let $\boldsymbol{x} ⊂ \mathcal{X}$ be finite and $\boldsymbol{\phi} = f(\boldsymbol{x})$ be the respective function values. Using a GP, $\boldsymbol{\phi}$ is a multivaraite normal with the following parameters $$p(\boldsymbol{\phi} \text{ } | \text{ } \boldsymbol{x}) = \mathcal{N}(\boldsymbol{\phi}; \boldsymbol{\mu}, \Sigma)$$ where $$\boldsymbol{\mu} = \mathbb{E}[\boldsymbol{\phi} \text{ } | \text{ } \boldsymbol{x}] = \mu(x)$$ and $$\Sigma = cov[\boldsymbol{\phi} \text{ } | \text{ } \boldsymbol{x}] = K(\boldsymbol{x}, \boldsymbol{x})$$
    
